@@ -1,7 +1,7 @@
 pandas==2.2.3
 numpy==2.0.0
 scikit-learn==1.5.1
-catboost==1.2.5
+catboost==1.2.3
 shap==0.45.0
 joblib==1.4.0
 python-dotenv==1.0.1
