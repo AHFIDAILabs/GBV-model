@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ - GBV Vulnerability Tool</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("/static/faq_image.png") no-repeat center center fixed;
+      background-size: cover;
+      color: #e0e0e0; /* soft gray for text */
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(10, 25, 50, 0.7); /* transparent navy */
+      padding: 16px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: #cfd8dc; /* soft text */
+      font-weight: bold;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .navbar ul li a:hover,
+    .navbar ul li a.active { color: #ff69b4; } /* pink */
+
+    .faq-container {
+      background: rgba(10, 25, 50, 0.75); /* translucent navy container */
+      max-width: 950px;
+      margin: 40px auto;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      color: #81d4fa; /* soft blue heading */
+      margin-bottom: 30px;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 10px;
+    }
+
+    .faq-item h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #b3e5fc; /* light blue for question */
+      cursor: pointer;
+      transition: color 0.3s ease;
+      position: relative;
+      padding-right: 25px;
+    }
+
+    .faq-item h3:hover { color: #81d4fa; }
+
+    .faq-item h3::after {
+      content: '\f078'; /* FontAwesome down arrow */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active h3::after {
+      transform: rotate(-180deg);
+    }
+
+    .faq-item p {
+      margin: 6px 0 0 0;
+      font-size: 1rem;
+      line-height: 1.5;
+      display: none; /* hidden initially for collapsible effect */
+      color: #cfd8dc; /* softer gray for readability */
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .back-home a {
+      color: #81d4fa;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 18px;
+      border: 1px solid #81d4fa;
+      border-radius: 8px;
+      transition: 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .back-home a:hover {
+      background: #81d4fa;
+      color: #0d1b2a;
+    }
+
+    @media (max-width:700px){
+      .navbar ul { gap: 20px; flex-wrap: wrap; }
+      .faq-container { padding: 20px; }
+      h1 { font-size: 1.6rem; }
+      .faq-item h3 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="{{ url_for('home') }}"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="{{ url_for('prediction') }}"><i class="fa fa-brain"></i> Prediction</a></li>
+      <li><a href="{{ url_for('faq') }}" class="active"><i class="fa fa-question-circle"></i> FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}"><i class="fa fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- FAQ content -->
+  <div class="faq-container">
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="faq-item">
+      <h3>Q1: How does this tool work?</h3>
+      <p>The tool applies machine learning to analyze demographic, social, and contextual data. It predicts vulnerability to GBV, provides a confidence score, highlights contributing factors, and generates tailored recommendations.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q2: What makes this model different from traditional approaches?</h3>
+      <p>Unlike general assessments, the model offers a data-driven, individualized prediction with a confidence score. It also explains the top factors influencing vulnerability, giving users clear and actionable insights.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q3: How does the model explain its predictions?</h3>
+      <p>The model uses SHAP (SHapley Additive exPlanations) to show which features most influenced the prediction. This makes the results transparent and helps users understand the key drivers of vulnerability.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q4: Does the model replace human decision-making?</h3>
+      <p>No. The model is a supportive tool that provides evidence-based insights. It complements professional judgment and helps policymakers, NGOs, and service providers make informed decisions.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q5: Is my data saved or shared?</h3>
+      <p>No. The tool does not store or share personal data. Inputs are used only for generating predictions and are not retained after use.</p>
+    </div>
+
+    <div class="back-home">
+      <a href="{{ url_for('home') }}"><i class="fa fa-home"></i> Back to Home</a>
+    </div>
+  </div>
+
+  <!-- Collapsible FAQ Script -->
+  <script>
+    const faqItems = document.querySelectorAll(".faq-item");
+    faqItems.forEach(item => {
+      item.querySelector("h3").addEventListener("click", () => {
+        item.classList.toggle("active");
+        const p = item.querySelector("p");
+        if (p.style.display === "block") {
+          p.style.display = "none";
+        } else {
+          p.style.display = "block";
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

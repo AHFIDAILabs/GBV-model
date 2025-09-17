@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI-Powered GBV Prevention Tool</title>
+
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    /* Background Hero Section */
+    .hero {
+      background: url("/static/gbv-home.png") no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .navbar ul li a:hover {
+      color: #ff69b4;
+    }
+
+    /* Hero Text */
+    .hero-text {
+      max-width: 600px;
+      padding: 80px 50px;
+    }
+    .hero-text h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero-text p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: bold;
+      background: #00d4a5;
+      color: black;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #00b089;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-text {
+        padding: 50px 20px;
+      }
+      .hero-text h1 {
+        font-size: 2.2rem;
+      }
+      .hero-text p {
+        font-size: 1rem;
+      }
+      .navbar ul {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="/prediction"><i class="fas fa-brain"></i> Prediction</a></li>
+        <li><a href="/faq"><i class="fas fa-question-circle"></i> FAQ</a></li>
+        <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="hero-text">
+      <h1>AI-Powered<br>GBV Prevention Tool</h1>
+      <p>Prediction Tool Protecting Vulnerable Populations Through Data-Driven Insights</p>
+      <a href="/prediction" class="btn">GET STARTED</a>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GBV Vulnerability Assessment</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("/static/gbv-predng.png") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 16px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 35px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s ease;
+    }
+    .navbar ul li a:hover { color: #ff69b4;; }
+
+    .card {
+      background: rgba(0,0,0,0.8);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 1000px;
+      margin: 25px auto;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #008080;
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .small { font-size: 0.9rem; color: #ddd; text-align: center; margin-bottom: 20px; }
+
+    label { display:block; margin-top:10px; font-weight:600; }
+    input, select {
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+    select option { color: #000; } /* Ensures options are readable */
+    input::placeholder { color: #ccc; }
+
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .full { grid-column: 1 / -1; }
+
+    button {
+      margin-top:20px; padding:14px 22px; border:none;
+      background: linear-gradient(90deg, #008080, #006666);
+      color:white;
+      border-radius:8px; cursor:pointer;
+      font-size:1rem; font-weight:600;
+      transition: 0.3s;
+    }
+    button:hover { background: linear-gradient(90deg,#006666,#008080); }
+
+    .results {
+      margin-top: 30px;
+      background: rgba(0,0,0,0.6);
+      padding:20px;
+      border-radius:10px;
+    }
+    .badge {
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:8px;
+      color:white;
+      font-weight:700;
+      font-size:1.05rem;
+    }
+    .vulnerable { background: linear-gradient(90deg,#ff4500,#ff6347); }
+    .not-vulnerable { background: linear-gradient(90deg,#32cd32,#3cb371); }
+
+    .section-title { margin-top:14px; font-size:1.1rem; font-weight:700; }
+    ul { padding-left: 20px; margin-top: 6px; }
+    img.shap { max-width:100%; height:auto; border-radius:6px; margin-top:8px; }
+
+    details {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid #ffd700;
+      padding: 12px 16px;
+      border-radius:6px;
+    }
+    summary { cursor: pointer; font-weight:700; margin:6px 0; }
+    summary:hover { color:#ffd700; }
+
+    .model-input div { margin-bottom:6px; }
+
+    @media (max-width:700px){
+      .row { grid-template-columns: 1fr }
+      .navbar ul { gap: 15px; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <ul>
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/prediction"><i class="fa fa-brain"></i> Prediction</a></li>
+      <li><a href="/faq"><i class="fa fa-question-circle"></i> FAQ</a></li>
+      <li><a href="/contact"><i class="fa fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="card">
+    <h2>GBV Vulnerability Assessment</h2>
+    <p class="small">Fill required fields and click "Assess Vulnerability Risk".</p>
+
+    <form id="predictionForm">
+      <div class="row">
+        <!-- Input fields -->
+        <div>
+          <label for="individual_age">Age</label>
+          <input type="number" id="individual_age" name="individual_age" min="1" max="100" required>
+        </div>
+        <div>
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select...</option>
+            <option value="0">Female</option>
+            <option value="1">Male</option>
+          </select>
+        </div>
+        <div>
+          <label for="current_living_arrangement">Living Situation</label>
+          <select id="current_living_arrangement" name="current_living_arrangement" required>
+            <option value="">Select...</option>
+            <option value="0">Alone</option>
+            <option value="1">Parent</option>
+            <option value="2">Guardian</option>
+            <option value="3">Partner</option>
+            <option value="-1">Unknown</option>
+            <option value="99">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="individual_lives_with">Household Composition</label>
+          <select id="individual_lives_with" name="individual_lives_with" required>
+            <option value="">Select...</option>
+            <option value="0">Alone</option>
+            <option value="1">Parent/Guardian</option>
+            <option value="2">Relative</option>
+            <option value="3">Spouse/Cohabiting</option>
+            <option value="-1">Unknown</option>
+          </select>
+        </div>
+        <div>
+          <label for="individual_employment_status">Employment Status</label>
+          <select id="individual_employment_status" name="individual_employment_status" required>
+            <option value="">Select...</option>
+            <option value="0">Unemployed</option>
+            <option value="1">Currently employed</option>
+            <option value="2">Self employed</option>
+            <option value="-1">Unknown</option>
+            <option value="99">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="educational_status">Education Level</label>
+          <select id="educational_status" name="educational_status" required>
+            <option value="">Select...</option>
+            <option value="1">Completed primary</option>
+            <option value="2">Completed secondary</option>
+            <option value="3">Undergraduate</option>
+            <option value="4">Graduate</option>
+            <option value="5">Postgraduate</option>
+            <option value="6">Diploma</option>
+            <option value="-1">Unknown</option>
+          </select>
+        </div>
+        <div>
+          <label for="household_help">Are you a house help?</label>
+          <select id="household_help" name="household_help" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div>
+          <label for="vul_cat_if_applicable">Previously Victimized?</label>
+          <select id="vul_cat_if_applicable" name="vul_cat_if_applicable" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div>
+          <label for="IDP">Internally Displaced Person (IDP)?</label>
+          <select id="IDP" name="IDP" required>
+            <option value="">Select...</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div>
+          <label for="marital_status">Marital Status</label>
+          <select id="marital_status" name="marital_status" required>
+            <option value="">Select...</option>
+            <option value="0">Single</option>
+            <option value="1">Married/Cohabiting</option>
+            <option value="2">Divorced/Separated</option>
+            <option value="3">Widowed</option>
+            <option value="-1">Unknown</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="full">
+        <button type="submit" id="predictBtn">Assess Vulnerability Risk</button>
+      </div>
+    </form>
+
+    <div class="results" id="results" style="display:none;">
+      <div>
+        <h3>Result</h3>
+        <div id="predictionBadge"></div>
+        <p id="predictionLabel"></p>
+        <p id="confidenceScore"></p>
+        <p id="riskLevel"></p>
+      </div>
+
+      <details open>
+        <summary class="section-title">Insights</summary>
+        <div id="summaryInsights"></div>
+      </details>
+
+      <details>
+        <summary class="section-title">Top Contributing Factors (SHAP)</summary>
+        <div id="shapPlot"></div>
+      </details>
+
+      <details>
+        <summary class="section-title">Model Input</summary>
+        <div id="inputDisplay"></div>
+      </details>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      document.getElementById('predictBtn').disabled = true;
+
+      const form = new FormData(this);
+      const data = {};
+      for (let [k,v] of form.entries()) data[k]=v;
+
+      try {
+        const res = await fetch('/predict', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const payload = await res.json();
+        if (!payload.success) { alert(payload.error || 'Prediction failed'); return; }
+        renderResult(payload);
+      } catch(err) {
+        alert('Network or server error: ' + err.message);
+      } finally { document.getElementById('predictBtn').disabled = false; }
+    });
+
+    function renderResult(payload) {
+      const p = payload.prediction || {};
+      const explanation = payload.explanation || {};
+      const user_input = payload.user_input || payload.model_input || {};
+
+      const isVul = (p.prediction === 1 || p.prediction === '1' || p.prediction === 'VULNERABLE');
+      const badge = document.getElementById('predictionBadge');
+      badge.innerHTML = isVul
+        ? '<span class="badge vulnerable">VULNERABLE</span>'
+        : '<span class="badge not-vulnerable">NOT VULNERABLE</span>';
+
+      document.getElementById('predictionLabel').textContent =
+        p.prediction_label || (isVul ? 'VULNERABLE' : 'NOT VULNERABLE');
+      document.getElementById('confidenceScore').textContent =
+        'Confidence: ' + (p.confidence !== undefined ? p.confidence + '%' : 'N/A');
+      document.getElementById('riskLevel').textContent =
+        'Risk Level: ' + (p.risk_level || 'N/A');
+
+      let s = '';
+      if (explanation && explanation.insights) {
+        if (explanation.insights.reasons && explanation.insights.reasons.length) {
+          s += '<h5>Key Risk Factors</h5><ul>';
+          explanation.insights.reasons.forEach(r => s += `<li>${r}</li>`);
+          s += '</ul>';
+        }
+        if (explanation.insights.suggestions && explanation.insights.suggestions.length) {
+          s += '<h5>Recommended Interventions</h5><ul>';
+          explanation.insights.suggestions.forEach(r => s += `<li>${r}</li>`);
+          s += '</ul>';
+        }
+      } else { s += '<p class="small">No insights available.</p>'; }
+      document.getElementById('summaryInsights').innerHTML = s;
+
+      if (payload.shap_plot) {
+        document.getElementById('shapPlot').innerHTML = `<img class="shap" src="data:image/png;base64,${payload.shap_plot}" alt="shap">`;
+      } else { document.getElementById('shapPlot').innerHTML = '<p class="small">No SHAP plot available.</p>'; }
+
+      let inputHTML = '<div>';
+      for (const k of Object.keys(user_input)) { inputHTML += `<div><strong>${k}</strong>: ${user_input[k]}</div>`; }
+      inputHTML += '</div>';
+      document.getElementById('inputDisplay').innerHTML = inputHTML;
+
+      document.getElementById('results').style.display = 'block';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

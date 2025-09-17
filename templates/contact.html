@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact - GBV Vulnerability Prediction Tool</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url("{{ url_for('static', filename='gbv-predng.png') }}") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 16px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+    }
+    .navbar ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.3s ease;
+    }
+    .navbar ul li a:hover,
+    .navbar ul li a.active { color: #ff69b4; }
+
+    .overlay {
+      background: rgba(0,0,0,0.65);
+      padding: 50px 20px;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-container {
+      display: flex;
+      gap: 30px;
+      max-width: 1000px;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .contact-form, .contact-info {
+      background: rgba(0,0,0,0.65);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      flex: 1;
+      min-width: 320px;
+      max-width: 480px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #008080; /* teal */
+      text-align: center;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #008080; /* teal */
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #fff;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 14px;
+    }
+    input::placeholder,
+    textarea::placeholder { color: #ddd; }
+    input:focus,
+    textarea:focus { outline: none; border-color: #008080; }
+    textarea { height: 120px; resize: vertical; }
+
+    /* Updated Send Button (Teal instead of Pink) */
+    .send-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #008080, #20c997); /* teal gradient */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .send-btn:hover {
+      background: linear-gradient(90deg, #20c997, #008080); /* teal hover */
+    }
+
+    .contact-detail {
+      margin-bottom: 15px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .contact-detail strong {
+      color: #008080; /* teal */
+    }
+    .contact-detail a {
+      color: #008080; /* teal */
+      text-decoration: none;
+    }
+    .contact-detail a:hover { text-decoration: underline; }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .contact-container { flex-direction: column; align-items: center; }
+      .navbar ul { gap: 20px; flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="{{ url_for('home') }}"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="{{ url_for('prediction') }}"><i class="fa fa-brain"></i> Prediction</a></li>
+      <li><a href="{{ url_for('contact') }}" class="active"><i class="fa fa-envelope"></i> Contact</a></li>
+      <li><a href="{{ url_for('faq') }}"><i class="fa fa-question-circle"></i> FAQ</a></li>
+    </ul>
+  </nav>
+
+  <!-- Overlay -->
+  <div class="overlay">
+    <div class="contact-container">
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <h2>📧 Send us a Message</h2>
+        <form method="POST" action="{{ url_for('contact') }}">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" placeholder="Type your message..." required></textarea>
+          </div>
+          <button type="submit" class="send-btn">📤 Send Message</button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <h2>📞 Contact Info</h2>
+        <div class="contact-detail">
+          <strong>Email:</strong> <a href="mailto:info@ahfid.org">info@ahfid.org</a>
+        </div>
+        <div class="contact-detail">
+          <strong>Phone:</strong> +234 706 171 8721
+        </div>
+        <div class="contact-detail">
+          <strong>Address:</strong> Abuja, Nigeria
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      © 2025 GBV Vulnerability Prediction Tool - AHFID. All rights reserved.
+    </div>
+  </div>
+
+</body>
+</html>
