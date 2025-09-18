@@ -5,9 +5,6 @@ import io
 import matplotlib
 import warnings
 import logging
-import threading
-import webbrowser
-import time
 
 # Use non-interactive backend for matplotlib
 matplotlib.use("Agg")
@@ -22,23 +19,18 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 app.secret_key = "gbv-prediction-app-2024"
 
-# Initialize predictor globally
-predictor = None
+# ------------------- Initialize predictor globally -------------------
 
-def initialize_predictor():
-    """Initialize the GBV predictor on app startup"""
-    global predictor
-    try:
-        predictor = GBVVulnerabilityPredictor()
-        success = predictor.load_model()
-        if not success:
-            raise Exception("Failed to load model")
-        logging.info("Model loaded successfully")
-        return True
-    except Exception as e:
-        logging.error(f"Failed to initialize predictor: {e}")
+try:
+    predictor = GBVVulnerabilityPredictor()
+    if not predictor.load_model():
+        logging.error("Failed to load model at startup")
         predictor = None
-        return False
+    else:
+        logging.info("Model loaded successfully at startup")
+except Exception as e:
+    logging.exception("Exception during predictor initialization: %s", e)
+    predictor = None
 
 # ------------------- Utility functions -------------------
 
@@ -111,12 +103,10 @@ def faq():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        # Here you can handle form submissions if needed
         name = request.form.get("name", "")
         email = request.form.get("email", "")
         message = request.form.get("message", "")
         logging.info(f"Received contact form: {name}, {email}, {message}")
-        # For now, redirect back to contact page
         return redirect(url_for("contact"))
     return render_template("contact.html")
 
@@ -193,17 +183,12 @@ def health():
 # ------------------- Main -------------------
 
 if __name__ == "__main__":
-    ok = initialize_predictor()
-    if not ok:
-        print("Model initialization failed - exiting.")
-        raise SystemExit(1)
-
+    import threading, webbrowser, time
     def _open_browser():
         time.sleep(0.6)
         try:
             webbrowser.open("http://127.0.0.1:5000")
         except Exception:
             pass
-
     threading.Thread(target=_open_browser, daemon=True).start()
     app.run(host="127.0.0.1", port=5000, debug=False, use_reloader=False)
