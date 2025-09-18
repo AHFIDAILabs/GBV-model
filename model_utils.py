@@ -32,25 +32,37 @@ class GBVVulnerabilityPredictor:
         Load the trained model and associated artifacts
         """
         try:
-            # Load the trained model
+            # Absolute paths for debugging
             model_path = os.path.join(self.model_dir, "gbv_logistic_regression_model.joblib")
+            features_path = os.path.join(self.model_dir, "top_features.joblib")
+            importance_path = os.path.join(self.model_dir, "feature_importance.csv")
+
+            # Debugging: print absolute paths
+            print("DEBUG: Looking for files at:")
+            print(f"  Model file: {os.path.abspath(model_path)}")
+            print(f"  Features file: {os.path.abspath(features_path)}")
+            print(f"  Feature importance file: {os.path.abspath(importance_path)}")
+
+            # Check existence
             if not os.path.exists(model_path):
                 raise FileNotFoundError(f"Model file not found: {model_path}")
+            if not os.path.exists(features_path):
+                raise FileNotFoundError(f"Top features file not found: {features_path}")
+
+            # Load model
             self.model = joblib.load(model_path)
             print(f"Model loaded successfully from {model_path}")
 
             # Load top features
-            features_path = os.path.join(self.model_dir, "top_features.joblib")
-            if not os.path.exists(features_path):
-                raise FileNotFoundError(f"Features file not found: {features_path}")
             self.top_features = joblib.load(features_path)
             print(f"Top features loaded: {len(self.top_features)} features")
 
             # Load feature importance (optional)
-            importance_path = os.path.join(self.model_dir, "feature_importance.csv")
             if os.path.exists(importance_path):
                 self.feature_importance = pd.read_csv(importance_path)
                 print("Feature importance loaded successfully")
+            else:
+                print("Feature importance file not found, skipping.")
 
             self._is_loaded = True
             return True
