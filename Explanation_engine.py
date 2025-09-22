@@ -20,8 +20,8 @@ def gbv_rule_insights(instance_data):
         if age < 18:
             reasons.append("Individual is under 18, potentially more vulnerable to GBV.")
             suggestions.append("Consider additional protective interventions for minors.")
-        elif age > 50:
-            reasons.append("Individual is above 50, vulnerability risk may vary.")
+        elif age > 65:
+            reasons.append("Individual is above 65, vulnerability risk may vary.")
             suggestions.append("Monitor and provide supportive community resources.")
 
     employment = instance_data.get("individual_employment_status")
