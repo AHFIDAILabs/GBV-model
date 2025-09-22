@@ -24,7 +24,7 @@ def load_and_prepare_data(data_path):
         raise ValueError(f"'{target_col}' column not found in data")
 
     print(f"✅ Data loaded successfully. Shape: {df.shape}")
-    print(f"🎯 Target distribution:\n{df[target_col].value_counts()}")
+    print(f" Target distribution:\n{df[target_col].value_counts()}")
 
     return df, target_col
 
@@ -121,7 +121,7 @@ def main():
         cat_features = [i for i, col in enumerate(X.columns) if X[col].dtype == "object"]
 
         # 2. Train/test split
-        print("\n2️⃣ Splitting data...")
+        print("\n Splitting data...")
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, stratify=y, random_state=42
         )
@@ -134,15 +134,15 @@ def main():
         )
 
         # 3. Train CatBoost
-        print("\n3️⃣ Training CatBoost model...")
+        print("\n Training CatBoost model...")
         model = train_catboost_model(X_train_sub, y_train_sub, X_val, y_val, cat_features)
 
         # 4. Evaluate
-        print("\n4️⃣ Evaluating model on test set...")
+        print("\n Evaluating model on test set...")
         metrics = evaluate_model(model, X_test, y_test, "CatBoost")
 
         # 5. Feature importance
-        print("\n5️⃣ Extracting feature importance...")
+        print("\n Extracting feature importance...")
         feature_importance = pd.DataFrame({
             "Feature": X.columns,
             "Importance": model.get_feature_importance()
@@ -150,22 +150,22 @@ def main():
         print(feature_importance.head(10))
 
         # 6. Save artifacts
-        print("\n6️⃣ Saving model artifacts...")
+        print("\n Saving model artifacts...")
         save_model_artifacts(model, feature_importance, MODEL_DIR)
 
         # 7. Create prediction template
-        print("\n7️⃣ Creating prediction template...")
+        print("\n Creating prediction template...")
         create_prediction_template(X.columns, MODEL_DIR)
 
-        print("\n🎉 Training completed successfully!")
+        print("\n Training completed successfully!")
         print("=" * 60)
-        print(f"📁 Model saved in: {MODEL_DIR}/")
-        print(f"🎯 Final F1 Score: {metrics['f1']:.4f}")
-        print(f"🎯 Final Accuracy: {metrics['accuracy']:.4f}")
-        print(f"🎯 Final ROC AUC: {metrics['auc']:.4f}")
+        print(f" Model saved in: {MODEL_DIR}/")
+        print(f" Final F1 Score: {metrics['f1']:.4f}")
+        print(f" Final Accuracy: {metrics['accuracy']:.4f}")
+        print(f" Final ROC AUC: {metrics['auc']:.4f}")
 
     except Exception as e:
-        print(f"❌ Error occurred: {str(e)}")
+        print(f" Error occurred: {str(e)}")
         raise
 
 
